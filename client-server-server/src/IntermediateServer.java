@@ -9,20 +9,23 @@ import java.net.Socket;
 
 public class IntermediateServer {
   public static void main(String[] args) {
-    try(ServerSocket serverSocket = new ServerSocket(5000)){
+    try{
 
+      ServerSocket serverSocket = new ServerSocket(5000);
       Socket socketA = serverSocket.accept();
       System.out.println("Client Connected");
       BufferedReader input = new BufferedReader(new InputStreamReader(socketA.getInputStream()));
       PrintWriter output = new PrintWriter(socketA.getOutputStream(), true);
 
+      Socket socketB = new Socket("localhost", 4412);
+      
       while (true) {
 
         String msgFromClient="";
         String msgFromServer="";
         msgFromClient = input.readLine();
         
-        try (Socket socketB = new Socket("localhost", 4412)) {
+        try {
           
           BufferedReader recieveFromServer = new BufferedReader(new InputStreamReader(socketB.getInputStream()));
           PrintWriter sendToServer = new PrintWriter(socketB.getOutputStream());
@@ -34,8 +37,6 @@ public class IntermediateServer {
               break;
             }
             msgFromServer = recieveFromServer.readLine();
-
-            socketB.close();
               
 
           } catch (IOException e) {
@@ -48,6 +49,9 @@ public class IntermediateServer {
           //TODO: handle exception
           System.out.println("Error occured 2: "+e.getMessage());
           e.printStackTrace();
+        }
+        finally {
+          socketB.close();
         }
         output.println(msgFromServer);
       }
