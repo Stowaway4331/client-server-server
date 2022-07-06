@@ -18,6 +18,7 @@ public class Server {
 
       while (true) {
         String echoString = input.readLine();
+        System.out.println("Message from intermediate server - " +echoString);
         if (echoString.equals("exit")) {
           break;
         }
