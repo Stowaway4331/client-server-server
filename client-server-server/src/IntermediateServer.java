@@ -54,7 +54,7 @@ public class IntermediateServer {
 
     } 
     
-    catch(IOException e){
+    catch(Exception e){
       // e.printStackTrace();
       System.out.println("Server exception " + e.getMessage());
     }
