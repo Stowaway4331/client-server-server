@@ -1,4 +1,3 @@
-package com.jeremie;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,25 +8,30 @@ import java.net.Socket;
 
 public class Server {
   public static void main(String[] args) {
-    try(ServerSocket serverSocket = new ServerSocket(4412)){
+    try {
 
-      Socket socket = serverSocket.accept();
+      ServerSocket serverSocket = new ServerSocket(4412);
+      Socket socketA = serverSocket.accept();
       System.out.println("Client Connected");
-      BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-      PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
+      BufferedReader input = new BufferedReader(new InputStreamReader(socketA.getInputStream()));
+      PrintWriter output = new PrintWriter(socketA.getOutputStream(), true);
 
       while (true) {
-        String echoString = input.readLine();
-        System.out.println("Message from intermediate server - " +echoString);
-        if (echoString.equals("exit")) {
+
+        String msgFromClient = "";
+        msgFromClient = input.readLine();
+        System.out.println("Message from Intermediate Server - " + msgFromClient);
+        if (msgFromClient.equals("exit")) {
           break;
         }
-        output.println("Echo from server: "+echoString);
-      }
+        output.println(msgFromClient);
 
-    } 
-    
-    catch(IOException e){
+      }
+      serverSocket.close();
+
+    }
+
+    catch (Exception e) {
       // e.printStackTrace();
       System.out.println("Server exception " + e.getMessage());
     }
