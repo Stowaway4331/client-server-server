@@ -37,6 +37,8 @@ public class IntermediateServer {
               break;
             }
             msgFromServer = recieveFromServer.readLine();
+            
+            output.println(msgFromServer);
               
 
           } catch (IOException e) {
@@ -53,7 +55,6 @@ public class IntermediateServer {
         finally {
           socketB.close();
         }
-        output.println(msgFromServer);
       }
 
     } 
