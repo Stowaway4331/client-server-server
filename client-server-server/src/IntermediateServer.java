@@ -24,6 +24,7 @@ public class IntermediateServer {
         String msgFromClient="";
         String msgFromServer="";
         msgFromClient = input.readLine();
+        System.out.println("Message from client - " + msgFromClient);
         
         try {
           
@@ -37,7 +38,6 @@ public class IntermediateServer {
               break;
             }
             msgFromServer = recieveFromServer.readLine();
-            
             output.println(msgFromServer);
               
 
