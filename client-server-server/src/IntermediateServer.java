@@ -1,4 +1,3 @@
-package com.jeremie;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,7 +8,7 @@ import java.net.Socket;
 
 public class IntermediateServer {
   public static void main(String[] args) {
-    try{
+    try {
 
       ServerSocket serverSocket = new ServerSocket(5000);
       Socket socketA = serverSocket.accept();
@@ -18,48 +17,38 @@ public class IntermediateServer {
       PrintWriter output = new PrintWriter(socketA.getOutputStream(), true);
 
       Socket socketB = new Socket("localhost", 4412);
-      
+      BufferedReader recieveFromServer = new BufferedReader(new InputStreamReader(socketB.getInputStream()));
+      PrintWriter sendToServer = new PrintWriter(socketB.getOutputStream(), true);
+
       while (true) {
 
-        String msgFromClient="";
-        String msgFromServer="";
+        String msgFromClient;
+        String msgFromServer;
         msgFromClient = input.readLine();
         System.out.println("Message from client - " + msgFromClient);
-        
+
         try {
-          
-          BufferedReader recieveFromServer = new BufferedReader(new InputStreamReader(socketB.getInputStream()));
-          PrintWriter sendToServer = new PrintWriter(socketB.getOutputStream());
 
-          try {
-            
-            sendToServer.println(msgFromClient);
-            if(msgFromClient.equals("exit")){
-              break;
-            }
-            msgFromServer = recieveFromServer.readLine();
-            output.println(msgFromServer);
-              
-
-          } catch (IOException e) {
-            //TODO: handle exception
-            System.out.println("Error occured 1: "+e.getMessage());
-            e.printStackTrace();
+          sendToServer.println(msgFromClient);
+          if (msgFromClient.equals("exit")) {
+            break;
           }
+          msgFromServer = recieveFromServer.readLine();
+          System.out.println("Message received back from Server - " + msgFromServer);
+          output.println(msgFromServer);
 
         } catch (IOException e) {
-          //TODO: handle exception
-          System.out.println("Error occured 2: "+e.getMessage());
+          // TODO: handle exception
+          System.out.println("Error occured 1: " + e.getMessage());
           e.printStackTrace();
         }
-        finally {
-          socketB.close();
-        }
-      }
 
-    } 
-    
-    catch(Exception e){
+      }
+      socketB.close();
+      serverSocket.close();
+    }
+
+    catch (Exception e) {
       // e.printStackTrace();
       System.out.println("Server exception " + e.getMessage());
     }
